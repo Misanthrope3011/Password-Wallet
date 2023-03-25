@@ -22,11 +22,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers("/login", "/signup/**")
                             .permitAll()
-                            .anyRequest()
-                            .authenticated();
+                            .requestMatchers("/user/decode/**").hasAuthority(Roles.USER_RO.name())
+                            .anyRequest().hasAnyAuthority(Roles.ADMIN.name(), Roles.USER_RW.name());
                 })
                 .logout()
                 .logoutSuccessHandler(logoutSuccess)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint())
                 .and()
                 .build();
     }

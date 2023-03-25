@@ -50,7 +50,7 @@ class EncryptionServiceTest {
 	private EncryptionService encryptionService;
 
 	@Test
-	void shouldInvokeUserPasswordSave() {
+	void shouldSaveEncryptedPassword_givenUserCredentials() {
 		try (MockedStatic<SecurityContextHolder> contextHolderMockedStatic = mockStatic(SecurityContextHolder.class)) {
 			mockSecurityContext();
 			CredentialDTO credentialDTO = new CredentialDTO("password", "username", "name", "url", "sample");
@@ -66,7 +66,7 @@ class EncryptionServiceTest {
 	}
 
 	@Test
-	void shouldInvokeDecryptMethodCurrentNumberOfTimes() {
+	void shouldDecryptEveryUserPassword_givenUserPasswordList() {
 		try (MockedStatic<SecurityContextHolder> contextHolderMockedStatic = mockStatic(SecurityContextHolder.class)) {
 			UserEntity testUser = initializeUserEntity();
 			when(userRepository.findByUsername(any())).thenReturn(Optional.of(testUser));
@@ -79,7 +79,7 @@ class EncryptionServiceTest {
 	}
 
 	@Test
-	void shouldReturnEncryptedString() {
+	void shouldReturnEncryptedString_givenEncryptionKey() {
 		String result = encryptionService.encrypt("pasword", "key", EncryptionType.HMAC);
 		String expectedPassword = "dShfnhzZIv8VkFjQFeVYFKhmhz/vugykWFemQEm56zDPYX1+U4zv+TDqY3cwFQyAzfk31CPDZyu8P/3zP1CE2Q==";
 
@@ -87,7 +87,7 @@ class EncryptionServiceTest {
 	}
 
 	@Test
-	void calculateSHA512() {
+	void shouldCalculateSHA512_givenUser() {
 		try (MockedStatic<SecurityContextHolder> contextHolderMockedStatic = mockStatic(SecurityContextHolder.class)) {
 			mockSecurityContext();
 			when(userRepository.findByUsername(any())).thenReturn(Optional.of(initializeUserEntity()));

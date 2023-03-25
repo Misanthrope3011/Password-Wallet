@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -50,7 +49,7 @@ class UserAuthenticationServiceTest {
 	}
 
 	@Test
-	void performLoginInvalidCredentials() {
+	void shouldPerformLoginInvalidCredentials_givenNonExistingUser() {
 		Mockito.when(encryptionService.encrypt(any(), any(), any())).thenReturn("encryptedPass");
 		UserDTO userDTO = new UserDTO("sample", "password");
 		UserEntity entity = new UserEntity();
@@ -62,7 +61,7 @@ class UserAuthenticationServiceTest {
 	}
 
 	@Test
-	void performLoginValidCredentials() {
+	void shouldperformLoginValidCredentials_givenValidUser() {
 		Mockito.when(encryptionService.encrypt(any(), any(), any())).thenReturn("encryptedPass");
 		Mockito.when(servletRequest.getSession(eq(true))).thenReturn(httpSession);
 		UserDTO userDTO = new UserDTO("sample", "smple");

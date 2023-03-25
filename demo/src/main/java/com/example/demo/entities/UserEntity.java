@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import com.example.demo.config.EncryptionType;
+import com.example.demo.config.Roles;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -61,7 +62,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority(Roles.USER_RW.name()));
     }
 
 }

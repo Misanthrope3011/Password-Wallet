@@ -20,13 +20,13 @@ class PasswordsEncryptionServiceTest {
 	}
 
 	@Test
-	void shouldReturnCorrectEncryptedPassword() {
+	void shouldReturnCorrectEncryptedPassword_givenKey() {
 
 		assertEquals(passwordsEncryptionService.encrypt("test", key), encryptedPassword);
 	}
 
 	@Test
-	void shouldReturnCorrectDecryptedPassword() {
+	void shouldReturnCorrectDecryptedPassword_givenKey() {
 
 		assertEquals(passwordsEncryptionService.decrypt(encryptedPassword, key), "test");
 	}

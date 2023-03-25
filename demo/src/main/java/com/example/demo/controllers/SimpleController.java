@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
@@ -30,22 +31,6 @@ public class SimpleController {
     private final UserService userService;
     private final UserAuthenticationService userAuthenticationService;
 
-    @PutMapping("/user/changePassword/{encryptionType}")
-    public ResponseEntity<UserEntity> encryptPassword(@PathVariable String encryptionType, @RequestBody CredentialDTO credentialDTO) {
-        String currentUser = SessionUtilsService.getSessionUserName();
-        UserEntity userEntity = userService.findByUsername(currentUser)
-                .orElseThrow(() -> new ExceptionHandler("Problem with your session has occured. Please log in again"));
-        userEntity.setPassword(encryptionService.encrypt(credentialDTO.password(), userEntity.getDecryptionKey(), EncryptionType.valueOf(encryptionType)));
-
-        return ResponseEntity.ok(userService.saveNewUser(userEntity));
-    }
-
-    @PostMapping("/user/addCredentials")
-    public ResponseEntity<Object> addCredentials(@RequestBody CredentialDTO credentialDTO) {
-
-        return ResponseEntity.ok(encryptionService.encryptGivenUserCredentials(credentialDTO));
-    }
-
     @GetMapping("/user/decode")
     public ResponseEntity<Object> decode() {
 
@@ -56,14 +41,13 @@ public class SimpleController {
     public ResponseEntity<Object> sampleResponse(HttpServletRequest request, @RequestBody UserDTO userDTO) {
         Optional<UserEntity> entity = userService.findByUsername(userDTO.username());
 
-        if (entity.isPresent()){
+        if (entity.isPresent()) {
             UserEntity user = entity.get();
             return userAuthenticationService.performLogin(request, userDTO, user);
         }
 
-           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
-
 
     @PostMapping("/signup/{encryption}")
     public ResponseEntity<Object> signUp(@RequestBody UserEntity user, @PathVariable String encryption) {
@@ -72,12 +56,19 @@ public class SimpleController {
             if (!userService.isUserExists(user.getUsername())) {
                 return ResponseEntity.ok(userAuthenticationService.signUpUser(user, encryptionType));
             }
-        } catch(Exception ex) {
+        }
+        catch (Exception ex) {
             return ResponseEntity.badRequest().body("Wrong encryption type provided");
         }
 
         return ResponseEntity.status(409).body("User already exists");
     }
 
+    @PostMapping("/switchToRO")
+    public ResponseEntity<Object> switchToRO() {
+        SessionUtilsService.updateUserPermsToRO();
+
+        return ResponseEntity.noContent().build();
+    }
 
 }
