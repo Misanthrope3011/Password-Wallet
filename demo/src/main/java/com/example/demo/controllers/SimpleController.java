@@ -64,11 +64,6 @@ public class SimpleController {
         return ResponseEntity.status(409).body("User already exists");
     }
 
-    @PostMapping("/switchToRO")
-    public ResponseEntity<Object> switchToRO() {
-        SessionUtilsService.updateUserPermsToRO();
 
-        return ResponseEntity.noContent().build();
-    }
 
 }

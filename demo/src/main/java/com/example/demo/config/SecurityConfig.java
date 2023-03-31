@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers("/login", "/signup/**")
                             .permitAll()
-                            .requestMatchers("/user/decode/**").hasAuthority(Roles.USER_RO.name())
+                            .requestMatchers("/user/decode/**","/switchToRW").hasAuthority(Roles.USER_RO.name())
                             .anyRequest().hasAnyAuthority(Roles.ADMIN.name(), Roles.USER_RW.name());
                 })
                 .logout()

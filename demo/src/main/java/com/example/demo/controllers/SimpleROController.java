@@ -38,5 +38,18 @@ public class SimpleROController {
 		return ResponseEntity.ok(encryptionService.encryptGivenUserCredentials(credentialDTO));
 	}
 
+	@PostMapping("/switchToRW")
+	public ResponseEntity<Object> switchToRW() {
+		SessionUtilsService.updateUserPermsToRW();
+
+		return ResponseEntity.noContent().build();
+	}
+
+	@PostMapping("/switchToRO")
+	public ResponseEntity<Object> switchToRO() {
+		SessionUtilsService.updateUserPermsToRO();
+
+		return ResponseEntity.noContent().build();
+	}
 
 }

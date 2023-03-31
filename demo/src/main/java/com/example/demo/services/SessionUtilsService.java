@@ -18,6 +18,18 @@ public class SessionUtilsService {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		List<GrantedAuthority> updatedAuthorities = new ArrayList<>();
 		updatedAuthorities.add(new SimpleGrantedAuthority(Roles.USER_RO.name()));
+		updateSecurityContext(auth, updatedAuthorities);
+	}
+
+	public static void updateUserPermsToRW() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		List<GrantedAuthority> updatedAuthorities = new ArrayList<>();
+		updatedAuthorities.add(new SimpleGrantedAuthority(Roles.USER_RO.name()));
+		updatedAuthorities.add(new SimpleGrantedAuthority(Roles.USER_RW.name()));
+		updateSecurityContext(auth, updatedAuthorities);
+	}
+
+	private static void updateSecurityContext(Authentication auth, List<GrantedAuthority> updatedAuthorities) {
 		Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), updatedAuthorities);
 		SecurityContextHolder.getContext().setAuthentication(newAuth);
 	}
