@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.catalina.User;
 
-@Entity(name = "usr_password")
+@Entity
+@Table(name = "usr_password")
 @Getter
 @Setter
 @AllArgsConstructor

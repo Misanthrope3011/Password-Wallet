@@ -4,6 +4,7 @@ import com.example.demo.entities.UserEntity;
 import com.example.demo.exceptions.ExceptionHandler;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,6 +33,13 @@ public class UserService {
 
 	public UserEntity createNewUser(UserEntity entity) {
 		return userRepository.save(entity);
+	}
+
+	public Long findUserIdByName() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		return userRepository.findByUsername(username).orElseThrow(() -> new ExceptionHandler("Session problem while extracting user")).
+				getId();
 	}
 
 }
